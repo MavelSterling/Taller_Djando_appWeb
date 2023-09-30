@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_crontab",
+    "rest_framework",
     "univalle_app"
 ]
 
@@ -116,3 +118,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+CRONJOBS = [
+    ('10 20 * * *', 'univalle_app.models.generar_multas')  # Se ejecuta todos los días a las 8:10 pm
+]
