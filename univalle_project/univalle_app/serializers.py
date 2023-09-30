@@ -29,6 +29,13 @@ class PrestamoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prestamo
         fields = '__all__'
+
+    def create(self, validated_data):
+        univalluno_data = validated_data.pop('univalluno')
+        univalluno_instance = Univalluno.objects.create(**univalluno_data)
+        
+        prestamo = Prestamo.objects.create(univalluno=univalluno_instance, **validated_data)
+        return prestamo
         
 class MultaSerializer(serializers.ModelSerializer):
     class Meta:
