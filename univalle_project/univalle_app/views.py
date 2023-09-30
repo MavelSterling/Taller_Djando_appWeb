@@ -1,9 +1,11 @@
 from django.shortcuts import render
-
-from datetime import datetime, time
 from django.utils import timezone
+from datetime import datetime, time
+
 from rest_framework import generics, views, status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 from .models import Univalluno, ArticuloDeportivo, Prestamo, Multa
 from .serializers import UnivallunoSerializer, ArticuloDeportivoSerializer, PrestamoSerializer, MultaSerializer
 
@@ -43,14 +45,11 @@ class MultaDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Multa.objects.all()
     serializer_class = MultaSerializer
 
-# Vistas especiales
-class GenerarMultasView(views.APIView):
-    def post(self, request, *args, **kwargs):
-        # Suponiendo que hay una función 'generar_multas()' que se encarga de la lógica de multas
-        generar_multas()
-        return Response({"detail": "Multas generadas con éxito"}, status=status.HTTP_200_OK)
+@api_view(['POST'])
+def generar_multas_view(request):
+    generar_multas()
+    return Response({"message": "Multas generadas con éxito"}, status=status.HTTP_200_OK)
 
-# función generar_multas 
 def generar_multas():
     now = timezone.now()
     vencimiento = datetime.combine(now.date(), time(20, 0))
@@ -60,25 +59,11 @@ def generar_multas():
             valor_multa = prestamo.articulo_deportivo.valor * 0.15  # 15% del valor del artículo
             Multa.objects.create(prestamo=prestamo, valor_multa=valor_multa)
 
-
-class MultaList(generics.ListCreateAPIView):
-    queryset = Multa.objects.all()
-    serializer_class = MultaSerializer
-    
-class MultaDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Multa.objects.all()
-    serializer_class = MultaSerializer
-    
-    
-class ReporteArticulosPorDeporte(APIView):
+class ReporteArticulosPorDeporte(views.APIView):
     def get(self, request, *args, **kwargs):
         inicio_fecha = self.request.query_params.get('inicio_fecha', None)
         fin_fecha = self.request.query_params.get('fin_fecha', None)
-
-        # Filtrar préstamos por rango de fechas
         prestamos = Prestamo.objects.filter(fecha_prestamo__range=[inicio_fecha, fin_fecha])
-
-        # Agrupar préstamos por deporte
         reporte = {}
         for prestamo in prestamos:
             deporte = prestamo.articulo_deportivo.deporte
@@ -86,27 +71,17 @@ class ReporteArticulosPorDeporte(APIView):
                 reporte[deporte] += 1
             else:
                 reporte[deporte] = 1
-
         return Response(reporte)
 
-class ReporteArticulosPorDia(APIView):
+class ReporteArticulosPorDia(views.APIView):
     def get(self, request, *args, **kwargs):
         inicio_fecha = self.request.query_params.get('inicio_fecha', None)
         fin_fecha = self.request.query_params.get('fin_fecha', None)
-
-        # Agrupar préstamos por fecha y contarlos
         data = (Prestamo.objects
                 .annotate(day=TruncDate('fecha_prestamo'))
                 .values('day')
                 .annotate(total=Count('id'))
                 .order_by('day')
                 .filter(day__range=[inicio_fecha, fin_fecha]))
-
         reporte = {item['day'].strftime('%Y-%m-%d'): item['total'] for item in data}
-
         return Response(reporte)
-
-
-
-
-
