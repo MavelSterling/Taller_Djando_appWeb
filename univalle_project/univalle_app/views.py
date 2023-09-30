@@ -13,6 +13,8 @@ from django.http import JsonResponse
 from django.db.models.functions import TruncDate
 
 from django.db.models import Sum
+from django.http import HttpResponse
+from django.template import loader
 
 # Vistas CRUD para Univalluno
 class UnivallunoList(generics.ListCreateAPIView):
@@ -116,8 +118,9 @@ def reportes_view(request):
     return render(request, 'reportes.html', context)
 
 def home(request):
-    return render(request, 'home.html')
-
+  template = loader.get_template('home.html')
+  return HttpResponse(template.render())
+    
 
 
 def multas_por_dia(request):

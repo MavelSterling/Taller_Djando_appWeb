@@ -24,7 +24,8 @@ from django.urls import path, re_path, include
 from django.shortcuts import redirect
 
 urlpatterns = [
-    re_path(r'^$', lambda request: redirect('univalluno-list', permanent=False)),
+    re_path(r'^$', lambda request: redirect('reportes', permanent=False)),
+    path('admin/', admin.site.urls),
 
     # Vistas CRUD para Univalluno
     path('univalluno/', views.UnivallunoList.as_view(), name='univalluno-list'),
@@ -34,13 +35,16 @@ urlpatterns = [
     path('articulo/', views.ArticuloDeportivoList.as_view(), name='articulo-list'),
     path('articulo/<int:pk>/', views.ArticuloDeportivoDetail.as_view(), name='articulo-detail'),
 
+
     # Vistas CRUD para Prestamo
     path('prestamo/', views.PrestamoList.as_view(), name='prestamo-list'),
     path('prestamo/<int:pk>/', views.PrestamoDetail.as_view(), name='prestamo-detail'),
 
+
     # Vistas CRUD para Multa
     path('multa/', views.MultaList.as_view(), name='multa-list'),
     path('multa/<int:pk>/', views.MultaDetail.as_view(), name='multa-detail'),
+
 
     # Vistas especiales
     path('generar-multas/', views.generar_multas_view, name='generar-multas'),
