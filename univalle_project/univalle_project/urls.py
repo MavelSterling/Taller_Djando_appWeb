@@ -16,7 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from univalle_app.views import generar_multas_view
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('generar_multas/', generar_multas_view, name='generar_multas'),
+
 ]
+
+
+
