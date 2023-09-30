@@ -9,8 +9,10 @@ from django.db.models import Count
 
 from .models import Univalluno, ArticuloDeportivo, Prestamo, Multa
 from .serializers import UnivallunoSerializer, ArticuloDeportivoSerializer, PrestamoSerializer, MultaSerializer
-from django.shortcuts import render
+from django.http import JsonResponse
+from django.db.models.functions import TruncDate
 
+from django.db.models import Sum
 
 # Vistas CRUD para Univalluno
 class UnivallunoList(generics.ListCreateAPIView):
@@ -55,7 +57,9 @@ def generar_multas_view(request):
 
 def generar_multas():
     now = timezone.now()
-    vencimiento = datetime.combine(now.date(), time(20, 0))
+    #vencimiento = datetime.combine(now.date(), time(20, 0))
+    vencimiento = timezone.make_aware(datetime.combine(now.date(), time(20, 0)))  # Hacerla aware
+
     if now > vencimiento:
         prestamos_sin_devolver = Prestamo.objects.filter(fecha_vencimiento__lte=now, articulo_deportivo__isnull=False)
         for prestamo in prestamos_sin_devolver:
@@ -105,4 +109,22 @@ def datos_articulos_por_deporte(request):
 
 
 def reportes_view(request):
-    return render(request, 'reportes.html')
+    articulos = ArticuloDeportivo.objects.all()
+    context = {
+        'articulos': articulos,
+    }
+    return render(request, 'reportes.html', context)
+
+def home(request):
+    return render(request, 'home.html')
+
+
+
+def multas_por_dia(request):
+    inicio_fecha = request.GET.get('inicio_fecha')
+    fin_fecha = request.GET.get('fin_fecha')
+    
+    multas = Multa.objects.filter(fecha_generada__range=[inicio_fecha, fin_fecha])
+    total_por_dia = multas.values('fecha_generada').annotate(total=Sum('valor_multa')) 
+
+    return render(request, 'multas_por_dia.html', {'total_por_dia': total_por_dia})

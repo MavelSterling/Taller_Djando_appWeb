@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Multas por día</h1>
+
+<form method="get">
+    <label>Desde:</label>
+    <input type="date" name="inicio_fecha" required>
+    <label>Hasta:</label>
+    <input type="date" name="fin_fecha" required>
+    <button type="submit">Filtrar</button>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Total de Multa</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in total_por_dia %}
+        <tr>
+            <td>{{ item.fecha_generada }}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

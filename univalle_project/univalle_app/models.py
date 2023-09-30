@@ -74,6 +74,7 @@ class Prestamo(models.Model):
 
 
 class Multa(models.Model):
+    fecha_generada = models.DateField()
     prestamo = models.OneToOneField(Prestamo, on_delete=models.CASCADE)
     valor_multa = models.PositiveIntegerField()
     pagada = models.BooleanField(default=False)

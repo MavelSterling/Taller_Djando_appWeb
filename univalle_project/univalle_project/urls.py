@@ -49,6 +49,10 @@ urlpatterns = [
     path('datos-articulos/', views.datos_articulos_por_deporte, name='datos-articulos'),
     
     path('reportes/', views.reportes_view, name='reportes'),
+    path('', views.home, name='home'),
+    path('multas_por_dia/', views.multas_por_dia, name='multas_por_dia'),
+
+
 
 ]
 

@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{% load static %}
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -21,13 +23,25 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
             <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Inicio</a>
+                <a class="nav-link" href="{% url 'home' %}">Univalluno</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'articulo' %}">Artículos deportivos</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'prestamo' %}">Préstamos</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'multa' %}">Multas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'reporte-deporte' %}">Reporte por Deporte</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'reporte-dia' %}">Reporte por Día</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'multas_por_dia' %}">Multas por Día</a>
             </li>
         </ul>
     </div>
