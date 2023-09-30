@@ -5,9 +5,12 @@ from datetime import datetime, time
 from rest_framework import generics, views, status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from django.db.models import Count
 
 from .models import Univalluno, ArticuloDeportivo, Prestamo, Multa
 from .serializers import UnivallunoSerializer, ArticuloDeportivoSerializer, PrestamoSerializer, MultaSerializer
+from django.shortcuts import render
+
 
 # Vistas CRUD para Univalluno
 class UnivallunoList(generics.ListCreateAPIView):
@@ -85,3 +88,21 @@ class ReporteArticulosPorDia(views.APIView):
                 .filter(day__range=[inicio_fecha, fin_fecha]))
         reporte = {item['day'].strftime('%Y-%m-%d'): item['total'] for item in data}
         return Response(reporte)
+
+def datos_articulos_por_deporte(request):
+    inicio_fecha = request.GET.get('inicio_fecha')
+    fin_fecha = request.GET.get('fin_fecha')
+
+    # Filtrar préstamos por rango de fechas y agrupar por deporte
+    data = (Prestamo.objects.filter(fecha_prestamo__range=[inicio_fecha, fin_fecha])
+            .values('articulo_deportivo__deporte')
+            .annotate(total_prestados=Count('articulo_deportivo')))
+
+    deportes = [item['articulo_deportivo__deporte'] for item in data]
+    prestados = [item['total_prestados'] for item in data]
+
+    return JsonResponse({'deportes': deportes, 'prestados': prestados})
+
+
+def reportes_view(request):
+    return render(request, 'reportes.html')
