@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Reportes de Préstamos Deportivos</h1>
+
+<!-- Sección para elegir rango de fechas -->
+<div class="my-4">
+    <label>Desde:</label>
+    <input type="date" id="inicio_fecha">
+    <label>Hasta:</label>
+    <input type="date" id="fin_fecha">
+    <button onclick="actualizarGraficos()">Actualizar Gráficos</button>
+</div>
+
+<!-- Gráfico de Artículos por Deporte -->
+<div>
+    <h2>Artículos prestados por Deporte</h2>
+    <canvas id="chartDeporte"></canvas>
+</div>
+
+<!-- Gráfico de Artículos por Día -->
+<div class="mt-4">
+    <h2>Artículos prestados por Día</h2>
+    <canvas id="chartDia"></canvas>
+</div>
+
+<!-- Scripts para gráficos -->
+<script src="{% static 'reportes.js' %}"></script>
+
+{% endblock %}
+
+    
