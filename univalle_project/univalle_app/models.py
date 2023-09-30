@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from datetime import time
+from datetime import datetime, time
 
 class Univalluno(models.Model):
     ESTUDIANTE = 'Estudiante'
@@ -33,7 +33,7 @@ class ArticuloDeportivo(models.Model):
     nombre = models.CharField(max_length=100)
     deporte = models.CharField(max_length=50)
     descripcion = models.TextField()
-    valor = models.PositiveIntegerField()
+    valor = models.IntegerField(null=True, blank=True)
     prestado = models.BooleanField(default=False)  # por defecto, el artículo no está prestado
 
     def esta_disponible(self):
@@ -63,7 +63,8 @@ class Prestamo(models.Model):
     def save(self, *args, **kwargs):
         # Si es una nueva instancia, establece la fecha_vencimiento a las 8:00 pm del día actual
         if not self.pk:
-            self.fecha_vencimiento = datetime.combine(self.fecha_prestamo.date(), time(20, 0))
+            ahora = datetime.now()
+            self.fecha_vencimiento = datetime.combine(ahora.date(), time(20, 0))
 
         self.clean()
         super(Prestamo, self).save(*args, **kwargs)
