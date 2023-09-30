@@ -1,3 +1,7 @@
 from django.test import TestCase
+from .models import Univalluno, ArticuloDeportivo, Prestamo, Multa
 
-# Create your tests here.
+
+
+        
+        
