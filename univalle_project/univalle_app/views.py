@@ -72,7 +72,13 @@ class ReporteArticulosPorDeporte(views.APIView):
     def get(self, request, *args, **kwargs):
         inicio_fecha = self.request.query_params.get('inicio_fecha', None)
         fin_fecha = self.request.query_params.get('fin_fecha', None)
+
+        # Si no se proporcionan fechas, podemos devolver un mensaje de error o establecer fechas por defecto.
+        if not inicio_fecha or not fin_fecha:
+            return Response({'error': 'Se requieren las fechas de inicio y fin para generar el reporte.'}, status=status.HTTP_400_BAD_REQUEST)
+
         prestamos = Prestamo.objects.filter(fecha_prestamo__range=[inicio_fecha, fin_fecha])
+        
         reporte = {}
         for prestamo in prestamos:
             deporte = prestamo.articulo_deportivo.deporte
@@ -80,7 +86,13 @@ class ReporteArticulosPorDeporte(views.APIView):
                 reporte[deporte] += 1
             else:
                 reporte[deporte] = 1
+
+        # Si no hay datos para reportar, podemos devolver un mensaje adecuado.
+        if not reporte:
+            return Response({'message': 'No hay datos para reportar en el rango de fechas proporcionado.'}, status=status.HTTP_404_NOT_FOUND)
+
         return Response(reporte)
+
 
 class ReporteArticulosPorDia(views.APIView):
     def get(self, request, *args, **kwargs):
