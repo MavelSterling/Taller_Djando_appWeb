@@ -15,6 +15,8 @@ from django.db.models.functions import TruncDate
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.template import loader
+from rest_framework.exceptions import ParseError
+
 
 # Vistas CRUD para Univalluno
 class UnivallunoList(generics.ListCreateAPIView):
@@ -94,18 +96,38 @@ class ReporteArticulosPorDeporte(views.APIView):
         return Response(reporte)
 
 
+
 class ReporteArticulosPorDia(views.APIView):
     def get(self, request, *args, **kwargs):
         inicio_fecha = self.request.query_params.get('inicio_fecha', None)
         fin_fecha = self.request.query_params.get('fin_fecha', None)
-        data = (Prestamo.objects
-                .annotate(day=TruncDate('fecha_prestamo'))
-                .values('day')
-                .annotate(total=Count('id'))
-                .order_by('day')
-                .filter(day__range=[inicio_fecha, fin_fecha]))
-        reporte = {item['day'].strftime('%Y-%m-%d'): item['total'] for item in data}
-        return Response(reporte)
+
+        # Comprobar que ambas fechas están presentes
+        if not inicio_fecha or not fin_fecha:
+            raise ParseError(detail="Se requieren las fechas de inicio y fin para generar el reporte.")
+
+        try:
+            # Obtener los datos de préstamos por día
+            data = (Prestamo.objects
+                    .annotate(day=TruncDate('fecha_prestamo'))
+                    .values('day')
+                    .annotate(total=Count('id'))
+                    .order_by('day')
+                    .filter(day__range=[inicio_fecha, fin_fecha]))
+            
+            # Crear el reporte en formato adecuado para el frontend
+            reporte = {item['day'].strftime('%Y-%m-%d'): item['total'] for item in data}
+            
+            # Si no hay datos, informar al usuario
+            if not reporte:
+                return Response({'message': 'No hay datos para reportar en el rango de fechas proporcionado.'}, status=status.HTTP_404_NOT_FOUND)
+
+            return Response(reporte)
+
+        except Exception as e:
+            # Manejar cualquier otra excepción que pueda surgir
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 def datos_articulos_por_deporte(request):
     inicio_fecha = request.GET.get('inicio_fecha')
