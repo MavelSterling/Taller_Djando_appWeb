@@ -14,7 +14,7 @@ Instrucciones:
 - Pasos para visualizar el proyecto:
   - Se accede a la carpeta univalle_project desde la terminal: 
     ```
-        cd univalle_proyect
+        cd univalle_project
     ```
 
   - Para ejecutar el proyecto: 
