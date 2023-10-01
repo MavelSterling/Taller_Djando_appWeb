@@ -12,10 +12,20 @@ INTEGRANTES:
 Instrucciones:
 
 - Pasos para visualizar el proyecto:
-  - Se accede a la carpeta univalle_project desde la terminal: cd univalle_proyect
-  - Para ejecutar el proyecto: python3 manage.py runserver
+  - Se accede a la carpeta univalle_project desde la terminal: 
+    ```
+        cd univalle_proyect
+    ```
+
+  - Para ejecutar el proyecto: 
+    ```
+        python3 manage.py runserver
+    ```
+
 
 Estructura del proyecto:
+
+```
 
 univalle_project/
 │
@@ -53,6 +63,7 @@ univalle_project/
     ├── __init__.py
     └── test.py
 
+```
 
 Notas:
 
@@ -61,13 +72,20 @@ En la aplicación, cuando se utiliza los reportes con django framework, en la di
 
 Para reportes por deporte, entre la fecha 2023 - 01 -01 y 2023- 10 -30
 
+```
+
 http://127.0.0.1:8000/reporte-deporte/?inicio_fecha=2023-01-01&fin_fecha=2023-10-30
 
+```
 
 
 Para reportes por día, entre la fecha 2023 - 01 -01 y 2023- 10 -30
 
+```
+
 http://127.0.0.1:8000/reporte-dia/?inicio_fecha=2023-01-01&fin_fecha=2023-10-30
+
+```
 
 
 Para el reporte de multas se selecciona el rango se fechas y muestra la fecha de la multa junto con el valor de la multa.
