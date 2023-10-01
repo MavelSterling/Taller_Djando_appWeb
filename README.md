@@ -60,11 +60,13 @@ En la aplicación, cuando se utiliza los reportes con django framework, en la di
 
 
 Para reportes por deporte, entre la fecha 2023 - 01 -01 y 2023- 10 -30
+
 http://127.0.0.1:8000/reporte-deporte/?inicio_fecha=2023-01-01&fin_fecha=2023-10-30
 
 
 
 Para reportes por día, entre la fecha 2023 - 01 -01 y 2023- 10 -30
+
 http://127.0.0.1:8000/reporte-dia/?inicio_fecha=2023-01-01&fin_fecha=2023-10-30
 
 
