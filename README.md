@@ -69,8 +69,9 @@ Notas:
 
 En la aplicación, cuando se utiliza los reportes con django framework, en la dirección de URL se debe poner la fecha para que llame a los artículos prestados por deporte y por día:
 
+POR EJEMPLO:
 
-Para reportes por deporte, entre la fecha 2023 - 01 -01 y 2023- 10 -30
+Para reportes por deporte, entre la fecha 2023 - 01 -01 y 2023- 10 -30 y se listan todos los préstamos.
 
 ```
 
@@ -79,7 +80,7 @@ http://127.0.0.1:8000/reporte-deporte/?inicio_fecha=2023-01-01&fin_fecha=2023-10
 ```
 
 
-Para reportes por día, entre la fecha 2023 - 01 -01 y 2023- 10 -30
+Para reportes por día, entre la fecha 2023 - 01 -01 y 2023- 10 -30, y se listan todos los préstamos.
 
 ```
 
@@ -89,3 +90,15 @@ http://127.0.0.1:8000/reporte-dia/?inicio_fecha=2023-01-01&fin_fecha=2023-10-30
 
 
 Para el reporte de multas se selecciona el rango se fechas y muestra la fecha de la multa junto con el valor de la multa.
+
+
+- Para el registro de información en la aplicación, se utiliza Django Framework, donde se llena los formularios se da click en POST y en la parte superior al darle click en GET se obtiene la lista de los datos registrados en cada tabla o sección de la app:
+
+Los registros de usuarios como estudiantes o funcionarios se realiza en la sección llama Univallunos
+
+Los registros de los artículos se realiza en la sección "Artículos deportivos"
+
+Los registros de préstamos se realiza en la sección "Préstamos", aquí se tiene relación con los usuarios
+
+Los registros de multas se realiza en la sección "multas"
+
