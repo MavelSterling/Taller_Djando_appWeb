@@ -22,6 +22,9 @@ from univalle_app import views
 from django.shortcuts import render
 from django.urls import path, re_path, include
 from django.shortcuts import redirect
+from django.conf import settings
+from django.conf.urls.static import static
+
 
 urlpatterns = [
     re_path(r'^$', lambda request: redirect('reportes', permanent=False)),
@@ -61,5 +64,6 @@ urlpatterns = [
 ]
 
 
-
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -10,18 +10,52 @@
         <input type="submit" value="Generar Reporte">
     </form>
 
-    <!-- Elemento canvas para el gráfico -->
-    <canvas id="myChart" width="400" height="200"></canvas>
+    <div class="row mt-4">
+        <!-- Columna para la tabla -->
+        <div class="col-md-6">
+            <h3>Artículos prestados por Deporte</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Deporte</th>
+                        <th>Cantidad Prestada</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaDeporte">
+                    {% for item in prestados %}
+                    <tr>
+                        <td>{{ item.prestados }}</td>
+                        <td>{{ item.deportes }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <!-- Script para dibujar el gráfico -->
+        <!-- Columna para el gráfico -->
+        <div class="col-md-6">
+            <h3>Gráfico de Artículos por Deporte</h3>
+            <canvas id="myChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+
+    <!-- Script para dibujar el gráfico y llenar la tabla -->
     <script>
         const inicioFecha = new URLSearchParams(window.location.search).get('inicio_fecha');
         const finFecha = new URLSearchParams(window.location.search).get('fin_fecha');
+        const tbody = document.getElementById('tablaDeporte');
 
         if (inicioFecha && finFecha) {
             fetch(`/reporte-deporte/?inicio_fecha=${inicioFecha}&fin_fecha=${finFecha}`)
                 .then(response => response.json())
                 .then(data => {
+                    // Llenar la tabla
+                    tbody.innerHTML = '';
+                    for (let deporte in data) {
+                        tbody.innerHTML += `<tr><td>${deporte}</td><td>${data[deporte]}</td></tr>`;
+                    }
+
+                    // Dibujar el gráfico
                     const ctx = document.getElementById('myChart').getContext('2d');
                     new Chart(ctx, {
                         type: 'bar',
