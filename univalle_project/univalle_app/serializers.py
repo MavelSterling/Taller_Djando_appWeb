@@ -32,7 +32,12 @@ class PrestamoSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         univalluno_data = validated_data.pop('univalluno')
-        univalluno_instance = Univalluno.objects.create(**univalluno_data)
+        
+        univalluno_instance, created = Univalluno.objects.update_or_create(
+            tipo_documento=univalluno_data['tipo_documento'], 
+            numero_documento=univalluno_data['numero_documento'], 
+            defaults=univalluno_data
+        )
         
         prestamo = Prestamo.objects.create(univalluno=univalluno_instance, **validated_data)
         return prestamo

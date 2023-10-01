@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Reporte de Artículos Prestados</h2>
+
+    <!-- Un formulario para seleccionar las fechas para los gráficos-->
+    <form method="get" action="{% url 'reporte-deporte' %}">
+        Fecha inicio: <input type="date" name="inicio_fecha" required>
+        Fecha fin: <input type="date" name="fin_fecha" required>
+        <input type="submit" value="Generar Reporte">
+    </form>
+
+    <!-- Elemento canvas para el gráfico -->
+    <canvas id="myChart" width="400" height="200"></canvas>
+
+    <!-- Script para dibujar el gráfico -->
+    <script>
+        const inicioFecha = new URLSearchParams(window.location.search).get('inicio_fecha');
+        const finFecha = new URLSearchParams(window.location.search).get('fin_fecha');
+
+        if (inicioFecha && finFecha) {
+            fetch(`/reporte-deporte/?inicio_fecha=${inicioFecha}&fin_fecha=${finFecha}`)
+                .then(response => response.json())
+                .then(data => {
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: Object.keys(data),
+                            datasets: [{
+                                label: 'Artículos prestados por deporte',
+                                data: Object.values(data),
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                });
+        }
+    </script>
+{% endblock %}
