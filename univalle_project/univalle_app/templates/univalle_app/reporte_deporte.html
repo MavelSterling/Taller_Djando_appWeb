@@ -50,11 +50,11 @@
                 .then(response => response.json())
                 .then(data => {
                     // Llenar la tabla
-                    tbody.innerHTML = '';
+                    tbody.innerHTML = '';  // Se limpia el contenido actual de la tabla
                     for (let deporte in data) {
+                        // Para cada deporte y cantidad, se crea una fila y se agrega al tbody
                         tbody.innerHTML += `<tr><td>${deporte}</td><td>${data[deporte]}</td></tr>`;
                     }
-
                     // Dibujar el gráfico
                     const ctx = document.getElementById('myChart').getContext('2d');
                     new Chart(ctx, {

@@ -72,6 +72,14 @@ function renderizarGraficoDeporte(data) {
     let labels = Object.keys(data);
     let values = Object.values(data);
 
+    // Llenar la tabla de deportes
+    let tablaDeporte = document.getElementById('tablaDeporte');
+    tablaDeporte.innerHTML = ''; // Limpiamos la tabla primero
+
+    for (let deporte in data) {
+        tablaDeporte.innerHTML += `<tr><td>${deporte}</td><td>${data[deporte]}</td></tr>`;
+    }
+
     // Actualizar la instancia del gráfico con los nuevos datos
     chartDeporte.data.labels = labels;
     chartDeporte.data.datasets[0].data = values;
@@ -81,6 +89,14 @@ function renderizarGraficoDeporte(data) {
 function renderizarGraficoPorDia(data) {
     const labels = Object.keys(data);
     const values = Object.values(data);
+
+    // Llenar la tabla de días
+    let tablaDia = document.getElementById('tablaDia');
+    tablaDia.innerHTML = ''; // Limpiamos la tabla primero
+
+    for (let dia in data) {
+        tablaDia.innerHTML += `<tr><td>${dia}</td><td>${data[dia]}</td></tr>`;
+    }
 
     // Actualizar la instancia del gráfico con los nuevos datos
     chartDia.data.labels = labels;
